@@ -1,7 +1,7 @@
 import ExpressError from "../utils/ExpressError.js"
 import jwt from "jsonwebtoken";
 
-const isLoggedin = async function(){
+const isLoggedin = async function(req,res,next){
     try{
         let {token} = req.cookies;
         if(!token){

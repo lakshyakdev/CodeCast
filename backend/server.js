@@ -1,7 +1,7 @@
-import app from "./app.js";
 import { config } from "dotenv"; 
-import dbConnection from "./config/dBconfig.js";
 config();
+import app from "./app.js";
+import dbConnection from "./config/dBconfig.js";
 
 const PORT = process.env.PORT || 8080;
 

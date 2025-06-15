@@ -12,9 +12,12 @@ app.get("/",(req,res)=>{
     console.log(process.env.CLOUD_API_KEY);
 })
 
+
 import userRouter from "./routes/user.js";
 app.use("/api/v4/users",userRouter);
 
+import CourseRouter from "./routes/course.js"
+app.use("/api/v4/courses",CourseRouter);
 
 app.use((err,req,res,next)=>{
     let {statusCode=500, message="something went wrong"} = err;
