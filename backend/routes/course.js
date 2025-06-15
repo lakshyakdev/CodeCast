@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createCourse, viewAllCourses, viewCourse } from "../controllers/course.js";
+import { createCourse, createLesson, deleteCourse, editRoute, enrollUser, viewAllCourses, viewCourse, viewLesson } from "../controllers/course.js";
 import isLoggedin from "../middlewares/isLoggedin.js";
 const router = Router();
 
@@ -10,10 +10,12 @@ const upload = multer({storage});
 router.get("/", viewAllCourses); //all courses
 router.get("/:id",viewCourse); //view course
 router.post("/",isLoggedin,upload.single("thumbnail"),createCourse); //create course
-// router.put("/:id") //edit course
-// router.delete("/:id") //delete course
-// router.post("/:id/enroll") //enroll user
+router.put("/:id",isLoggedin,upload.single("thumbnail"), editRoute) //edit course
+router.delete("/:id",isLoggedin,deleteCourse) //delete course
+router.post("/:id/enroll",isLoggedin,enrollUser) //enroll user
 
-// router.post("/:courseid/lessons/:lessonid") //view lesson
+router.post("/:courseid/lessons/:lessonid",isLoggedin,viewLesson) //view lesson
+
+router.post("/:courseid/lessons",isLoggedin,createLesson) //create lesson
 
 export default router;

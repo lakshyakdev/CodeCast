@@ -191,6 +191,70 @@ const adminRegister = async (req,res,next)=>{
 
 }
 
+const facultyRegister = async (req,res,next)=>{
+    let registringUser = req.user;
+    if(registringUser.role != "ADMIN"){
+        return next(new ExpressError(401,"You dont have permission for registeration of faculty pls contact admin"));
+    }
+    try{
+        if(!username){
+        return next(new ExpressError(400, "Username is required"));
+        }
+        if(!email){
+            return next(new ExpressError(400, "email is required"));
+        }
+        if(!password){
+            return next(new ExpressError(400, "password is required"));
+        }
+
+        if((await User.findOne({email:email}))){
+            return next(new ExpressError(500, "Email already registered"));
+        }
+        let url = "https://images.unsplash.com/vector-1740737650825-1ce4f5377085?q=80&w=2960&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+        let publicId = "deafult avatar";
+        if(req.file){
+            url = req.file.path;
+            publicId = req.file.filename;
+        }
+        let user = await User.create({
+            username,
+            email,
+            password,
+            role : "FACULTY",
+            avatar : {
+                url,
+                publicId,
+            },
+            subscriptions : {
+                plan : "PREMIUM",
+                status : "ACTIVE",
+                startDate : Date.now(),
+            },
+        });
+
+        if(!user){
+            return next(new ExpressError(500, "Something went wrong while registering user"));
+        }
+
+        await user.save();
+
+        user.password = undefined;
+
+        let token = user.generateJWTtoken();
+        res.cookie('token',token,cookieOptions);
+        
+        return res.status(200).json({
+            success: true,
+            message : "User registered successfully",
+            user,
+        });
+    }
+    catch(e){
+        return next(new ExpressError(500, e));
+    }
+    
+}
+
 export {
     register,
     loginUser,

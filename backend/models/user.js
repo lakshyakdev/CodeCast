@@ -33,7 +33,7 @@ const userSchema = new Schema({
     },
     role :{
         type : String,
-        enum : ["USER",'MODERATOR','ADMIN'],
+        enum : ["USER",'FACULTY','ADMIN'],
         default : "USER",
     },
     subscriptions :{
@@ -41,8 +41,12 @@ const userSchema = new Schema({
         type: String,
         enum: ["FREE", "BASIC", "PREMIUM"],
         default: "FREE",
-      },
-      status: {
+    },
+    enrolledCourses :[{
+        type: Schema.Types.ObjectId,
+        ref: "Course",
+    }],
+    status: {
         type: String,
         enum: ["ACTIVE", "CANCELLED", "EXPIRED"],
         default: "ACTIVE",
