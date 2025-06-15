@@ -37,7 +37,7 @@ const register = async (req,res,next)=>{
     let token = user.generateJWTtoken();
     res.cookie('token',token,cookieOptions);
     
-    res.json({
+    res.status(200).json({
         success: true,
         message : "User registered successfully",
         user,
@@ -68,7 +68,7 @@ const loginUser = async (req,res,next)=>{
     let token = user.generateJWTtoken();
     res.cookie("token",token,cookieOptions);
 
-    res.json({
+    res.status(200).json({
         success:true,
         message : "User login successfully",
         user,
@@ -77,28 +77,44 @@ const loginUser = async (req,res,next)=>{
 
 const logout = async (req,res,next)=>{
     try{
+        res.cookie("token",null ,{
+            maxAge : 0,
+            expires : 0,
+            secure : true,
+            httpOnly : true,
+        });
+    
+        res.status(200).json({
+            success : true,
+            message : "User logout successfully",
+        })
+    } catch(e){
+        return next(ExpressError(500, "Something went wrong during logout"));
+    }
+}
+
+const userProfile = async (req,res)=>{
+    try{
         let id = req.user;
         let user = await User.findById(id);
         if(!user){
             return next(ExpressError(400, "Invalid id pls login again"));
         }
-        res.cookie("token",null ,{
-            maxAge : 0,
-            expires : 0,
-        });
     
-        res.json({
+        res.status(200).json({
             success : true,
-            message : "User logout successfully",
+            message : "User profile fetched",
             user,
         })
-    } catch{
-        return next(ExpressError(500, "Something went wrong during logout"));
+    } catch(e){
+        return next(ExpressError(500, "Something went wrong",e));
     }
 }
+
 
 export {
     register,
     loginUser,
     logout,
+    userProfile,
 }

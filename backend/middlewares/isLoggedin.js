@@ -1,9 +1,14 @@
 import ExpressError from "../utils/ExpressError"
+import jwt from "jsonwebtoken";
 
-const isLoggedin = function(){
-    if(!req.cookie.id){
-        return next(ExpressError(400,"User not logged in"));
+const isLoggedin = async function(){
+    let {token} = req.cookie;
+    if(!token){
+        return next(ExpressError(400,"Unauthenticated ,User not logged in"));
     }
-    req.user = req.cookie;
+    let userDetails = await jwt.verify(token , process.env.JWT_SECRET);
+    req.user = userDetails;
     next();
 }
+
+export default isLoggedin;

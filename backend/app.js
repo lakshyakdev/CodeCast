@@ -7,6 +7,9 @@ app.use("/api/v1/user",user);
 import cookieParser from "cookie-parser";
 cookieParser(process.env.Secret);
 
+app.use(express.json());
+app.use(cookieParser());
+
 app.get("/",(req,res)=>{
     res.send("Server is working fine");
 })

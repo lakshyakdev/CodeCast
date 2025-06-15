@@ -33,7 +33,7 @@ const userSchema = new Schema({
     },
     role :{
         type : String,
-        enum : ["USER",'FACULTY','ADMIN'],
+        enum : ["USER",'MODERATOR','ADMIN'],
         default : "USER",
     },
     forgotPasswordToken : String,
@@ -50,24 +50,23 @@ userSchema.pre("save",async function (next){
     this.password = await bcrypt.hash(this.password,25)
 });
 
-userSchema.methods(
-    generateJWTtoken = function(){
-        return jwt.sign({
-            username : this.username,
-            id : this._id,
-            email :this.email,
-            subscriptions : this.subscriptions,
-            role : this.role,
-        },
-        process.env.JWT_SECRET,
-        {
-            expiresIn : process.env.JWT_EXPIRY,
-        })
+userSchema.methods.generateJWTtoken = function(){
+    return jwt.sign({
+        username: this.username,
+        id: this._id,
+        email: this.email,
+        subscriptions: this.subscriptions,
+        role: this.role,
     },
-    checkPass = async function(plainTextPass){
-        return await bcrypt.compare(plainTextPass,this.password);
-    }
-)
+    process.env.JWT_SECRET,
+    {
+        expiresIn: process.env.JWT_EXPIRY,
+    });
+};
+
+userSchema.methods.checkPass = async function(plainTextPass){
+    return await bcrypt.compare(plainTextPass, this.password);
+};
 
 const User = model("User",userSchema);
 
