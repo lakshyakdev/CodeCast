@@ -1,21 +1,19 @@
 import express from "express";
 const app = express();
 
-import user from "./routes/user.js"
-app.use("/api/v1/user",user);
-
 import cookieParser from "cookie-parser";
-cookieParser(process.env.Secret);
+
 
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser(process.env.Secret));
 
 app.get("/",(req,res)=>{
     res.send("Server is working fine");
+    console.log(process.env.CLOUD_API_KEY);
 })
 
 import userRouter from "./routes/user.js";
-app.use("/api/v1/users",userRouter);
+app.use("/api/v4/users",userRouter);
 
 
 app.use((err,req,res,next)=>{

@@ -14,7 +14,7 @@ const userSchema = new Schema({
         type : String,
         required : [true,"email is required"],
         unique : true,
-        match: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/,"please fill vaild email address"],
+        match: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,"please fill valid email address"],
         maxLength: [80, "Email is too long"],
     },
     password :{
@@ -36,8 +36,23 @@ const userSchema = new Schema({
         enum : ["USER",'MODERATOR','ADMIN'],
         default : "USER",
     },
+    subscriptions :{
+        plan: {
+        type: String,
+        enum: ["FREE", "BASIC", "PREMIUM"],
+        default: "FREE",
+      },
+      status: {
+        type: String,
+        enum: ["ACTIVE", "CANCELLED", "EXPIRED"],
+        default: "ACTIVE",
+      },
+      startDate: Date,
+      endDate: Date,
+      paymentIntentId: String,
+    },
     forgotPasswordToken : String,
-    forgotPasswordToken : Date,
+    forgotPasswordDate : Date,
 },
 {
     timestamps:true,
@@ -47,7 +62,7 @@ userSchema.pre("save",async function (next){
     if(!this.isModified('password')){
         return next();
     }
-    this.password = await bcrypt.hash(this.password,25)
+    this.password = await bcrypt.hash(this.password,10)
 });
 
 userSchema.methods.generateJWTtoken = function(){
