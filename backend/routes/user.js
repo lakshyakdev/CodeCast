@@ -12,7 +12,7 @@ router.post("/register",upload.single("avatar"),register);
 
 router.post("/login",loginUser);
 
-router.get("/logout",isLoggedin,logout);
+router.get("/logout",logout);
 
 router.get("/profile",userProfile);
 

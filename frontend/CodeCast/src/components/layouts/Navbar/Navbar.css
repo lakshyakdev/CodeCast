@@ -1,0 +1,14 @@
+.right-icons{
+    width: 20vh;
+    display: flex;
+    justify-content: space-evenly;
+}
+.authButtons{
+    background-color:black;
+}
+
+.authButtons:hover{
+    border-color:blueviolet;
+    border-width: 0.1em;
+    background-color: rgb(30, 27, 27);
+}

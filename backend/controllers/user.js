@@ -69,8 +69,8 @@ const loginUser = async (req,res,next)=>{
     if(!password){
         return next(new ExpressError(400, "password is required"));
     }
-
-    let user = await User.findOne({email:email}).select("+password");
+    try{
+        let user = await User.findOne({email:email}).select("+password");
 
     if(!user){
         return next(new ExpressError(400, "User not found"));
@@ -85,11 +85,16 @@ const loginUser = async (req,res,next)=>{
     let token = user.generateJWTtoken();
     res.cookie("token",token,cookieOptions);
 
-    res.status(200).json({
+    return res.status(200).json({
         success:true,
         message : "User login successfully",
         user,
     })
+    }
+    catch(e){
+        return next(new ExpressError(500,e));
+    }
+    
 }
 
 const logout = async (req,res,next)=>{

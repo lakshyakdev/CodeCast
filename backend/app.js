@@ -3,9 +3,16 @@ const app = express();
 
 import cookieParser from "cookie-parser";
 
+import cors from "cors";
 
 app.use(express.json());
 app.use(cookieParser(process.env.Secret));
+app.use(express.urlencoded({ extended: true }));
+
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
 
 app.get("/",(req,res)=>{
     res.send("Server is working fine");
