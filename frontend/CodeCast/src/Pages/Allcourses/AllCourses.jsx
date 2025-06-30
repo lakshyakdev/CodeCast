@@ -1,10 +1,11 @@
-import Drawer from "../../Components/Drawer/Drawer";
+
 import Card from "./Card/Card"
 import { useDispatch} from "react-redux";
 import { getAllCourses } from "../../redux/slices/courseSlice";
 import toast from "react-hot-toast";
 import { useState,useEffect } from "react";
 import "./AllCourses.css"
+import Drawer from "../../ComponentFolder/Drawer/Drawer";
 
 
 export default function AllCourses(){

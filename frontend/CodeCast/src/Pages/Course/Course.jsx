@@ -4,7 +4,8 @@ import { viewCourse } from "../../redux/slices/courseSlice";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom'
-import Drawer from "../../Components/Drawer/Drawer";
+import Drawer from "../../ComponentFolder/Drawer/Drawer";
+
 
 export default function Course(){
     const dispatch =useDispatch();
