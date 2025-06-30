@@ -10,7 +10,7 @@ app.use(cookieParser(process.env.Secret));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "https://codecast-l16n.onrender.com",
   credentials: true,
 }));
 
