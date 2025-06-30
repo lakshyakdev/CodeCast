@@ -1,10 +1,14 @@
 import { Route , Routes } from "react-router-dom";
-import Homepage from "./components/homepage/Homepage.jsx"
-import Layout from "./components/layouts/Layout/Layout.jsx";
-import NotFound from "./components/Notfound/NotFound.jsx";
-import LoginPage from "./components/loginPage/loginPage.jsx";
-import SignupPage from "./components/SignupPage/SignupPage.jsx";
-import { PreventAuthAccess } from "./components/authGuard/authGuard.jsx";
+import Homepage from "./Pages/homepage/Homepage.jsx";
+import Layout from "./Components/layouts/Layout/Layout.jsx";
+import { PreventAuthAccess } from "./Components/authGuard/authGuard.jsx";
+import LoginPage from "./Pages/loginPage/LoginPage.jsx";
+import SignupPage from "./Pages/SignupPage/SignupPage.jsx";
+import AllCourses from "./Pages/Allcourses/AllCourses.jsx";
+import Course from "./Pages/Course/Course.jsx";
+import ViewProfile from "./Pages/ViewProfile/ViewProfile.jsx";
+import NotFound from "./Pages/Notfound/NotFound.jsx";
+
 
 export default function AppRoutes(){
     return(
@@ -18,6 +22,9 @@ export default function AppRoutes(){
                 <PreventAuthAccess >
                 <Layout child={<SignupPage />}/>
                 </PreventAuthAccess> } />
+            <Route path="/courses" element= {<AllCourses />} />
+            <Route path="/course/:id" element={<Course />}></Route>
+            <Route path="/profile" element={<Layout child={<ViewProfile />}/>}></Route>
             <Route path="*" element={<Layout child={<NotFound />}/>}/>
         </Routes>
     )

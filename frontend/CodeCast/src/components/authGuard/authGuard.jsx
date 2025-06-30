@@ -31,7 +31,9 @@ export function RequireAuth({ children }) {
     useEffect(() => {
         if (!isloggedin) {
             toast.error("Please login to access this page");
-            navigate("/login", { replace: true });
+            setTimeout(() => {
+            navigate("/", { replace: true });
+        }, 100);
         }
     }, [isloggedin, navigate]);
 

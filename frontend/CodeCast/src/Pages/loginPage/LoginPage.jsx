@@ -29,7 +29,6 @@ export default function LoginPage() {
         try {
             const response = await dispatch(login(inputData));
             toast.dismiss(loadingToast);
-            console.log(response);
             if (response.type === '/auth/login/fulfilled' && response.payload?.success) {
                     toast.success(response.payload?.message || "Successfully logged in");
                     setinputData({
@@ -37,7 +36,7 @@ export default function LoginPage() {
                         password: "",
                     });
                     navigate("/");
-            } 
+            }
             else if (response.type === '/auth/login/rejected') {
                 toast.error(response.payload || "Login failed");
             } else {

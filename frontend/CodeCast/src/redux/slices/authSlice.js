@@ -1,13 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../../helper/AxiosInstance.js";
-import toast from "react-hot-toast";
 
 const initialState = {
-    isloggedin: localStorage.getItem('isloggedin') === "true",
+    isloggedin: false,
     loginTimestamp: null,
-    role: localStorage.getItem('role') || "",
-    username: localStorage.getItem('username') || "",
-    avatarUrl: localStorage.getItem('avatarUrl') || "",
+    role: "",
+    username: "",
+    avatarUrl:"",
 };
 
 export const createAccount = createAsyncThunk("/auth/signup", async (data, { rejectWithValue }) => {
@@ -40,6 +39,16 @@ export const logout = createAsyncThunk("/auth/logout", async (_, { rejectWithVal
     }
 });
 
+export const userProfile = createAsyncThunk("/auth/profile", async ( _ , { rejectWithValue }) => {
+    try {
+        const res = await axiosInstance.get("users/profile");
+        return res.data;
+    } catch (e) {
+        const errorMessage = e?.response?.data?.message || "Login failed";
+        return rejectWithValue(errorMessage);
+    }
+});
+
 const authSlice = createSlice({
     name: "auth",
     initialState: initialState,
@@ -47,10 +56,6 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(login.fulfilled, (state, action) => {
-                localStorage.setItem("isloggedin", "true");
-                localStorage.setItem("role", action?.payload?.user?.role);
-                localStorage.setItem("username", action?.payload?.user?.username);
-                localStorage.setItem("avatarUrl", action?.payload?.user?.avatar?.url);
                 state.isloggedin = true;
                 state.loginTimestamp = Date.now();
                 state.avatarUrl = action?.payload?.user?.avatar?.url;
@@ -61,10 +66,6 @@ const authSlice = createSlice({
                 console.log("Login failed:", action.payload);
             })
             .addCase(createAccount.fulfilled, (state, action) => {
-                localStorage.setItem("isloggedin", "true");
-                localStorage.setItem("role", action?.payload?.user?.role);
-                localStorage.setItem("username", action?.payload?.user?.username);
-                localStorage.setItem("avatarUrl", action?.payload?.user?.avatar?.url);
                 state.isloggedin = true;
                 state.loginTimestamp = Date.now();
                 state.avatarUrl = action?.payload?.user?.avatar?.url;
@@ -75,15 +76,26 @@ const authSlice = createSlice({
                 console.log("Registration failed:", action.payload);
             })
             .addCase(logout.fulfilled, (state, action) => {
-                localStorage.setItem("isloggedin", "false");
-                localStorage.setItem("username", "");
-                localStorage.setItem("role", "");
-                localStorage.setItem("avatarUrl", "");
                 state.isloggedin = false;
                 state.avatarUrl = "";
                 state.username = "";
                 state.role = "";
-            });
+            })
+            .addCase(userProfile.fulfilled, (state, action) => {
+                state.isloggedin = true;
+                state.loginTimestamp = Date.now();
+                state.avatarUrl = action?.payload?.user?.avatar?.url;
+                state.username = action?.payload?.user?.username;
+                state.role = action?.payload?.user?.role;
+            })
+            .addCase(userProfile.rejected, (state, action) => {
+                console.log("Login failed:", action.payload);
+                state.isloggedin = false;
+                state.loginTimestamp = null;
+                state.avatarUrl = "";
+                state.username = "";
+                state.role = "";
+            })
     }
 });
 

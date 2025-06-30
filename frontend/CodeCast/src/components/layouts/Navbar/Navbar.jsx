@@ -23,7 +23,7 @@ export default function Navbar(){
     let UserProfileURL = useSelector((state)=> state?.auth?.avatarUrl);
     return(
         <>
-            <div className="navbar bg-base-100 shadow-sm" data-theme="dark">
+            <div className="navbar bg-base-100 shadow-sm" data-theme="dark" >
                 <div className="navbar-start">
                     <div className="dropdown">
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">

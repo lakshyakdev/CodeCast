@@ -1,0 +1,19 @@
+.logo-btn{
+    color: black;
+    padding: 30px;
+    border-color:rgb(239, 234, 230)k;
+}
+.logo-btn:hover{
+    border-color: blueviolet;
+}
+.menu-btn:hover{
+    border: 2px solid;
+    border-color: blueviolet;
+    color: blueviolet;
+}
+.menu-btn{
+    border: none;
+}
+.drawer-side{
+    text-align: center;
+}

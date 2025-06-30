@@ -14,7 +14,7 @@ router.post("/login",loginUser);
 
 router.get("/logout",logout);
 
-router.get("/profile",userProfile);
+router.get("/profile",isLoggedin,userProfile);
 
 router.post("/admin/register/:id",upload.single("avatar"), adminRegister);
 

@@ -115,9 +115,9 @@ const logout = async (req,res,next)=>{
     }
 }
 
-const userProfile = async (req,res)=>{
+const userProfile = async (req,res,next)=>{
     try{
-        let id = req.user;
+        let id = req.user.id;
         let user = await User.findById(id);
         if(!user){
             return next(new ExpressError(400, "Invalid id pls login again"));
@@ -129,7 +129,7 @@ const userProfile = async (req,res)=>{
             user,
         })
     } catch(e){
-        return next(new ExpressError(500, "Something went wrong",e));
+        return next(new ExpressError(500, e));
     }
 }
 

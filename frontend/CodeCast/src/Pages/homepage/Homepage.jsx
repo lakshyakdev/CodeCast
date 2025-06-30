@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import "./Homepage.css"
 export default function Homepage(){
     return(
@@ -16,7 +17,7 @@ export default function Homepage(){
                     <p className="mb-5 para">
                        CodeCast is your all-in-one coding education platform, offering subscription-based access to expert-led courses, real-world projects, and industry-focused interview prep. Whether you're a beginner or a seasoned developer, our structured learning paths and hands-on challenges will help you grow faster and build skills that actually matter in today’s tech-driven world.
                     </p>
-                    <button className="btn btn-primary">Get Started</button>
+                    <Link to="/courses" className="btn btn-primary">Get Started</Link>
                     </div>
                 </div>
             </div>
