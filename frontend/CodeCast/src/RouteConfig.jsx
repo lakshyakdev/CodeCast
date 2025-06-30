@@ -1,7 +1,7 @@
 import { Route , Routes } from "react-router-dom";
 import Homepage from "./Pages/homepage/Homepage.jsx";
-import Layout from "./components/layouts/Layout/Layout.jsx";
-import { PreventAuthAccess } from "./components/authGuard/authGuard.jsx";
+import Layout from "./Components/layouts/Layout/Layout.jsx";
+import { PreventAuthAccess } from "./Components/authGuard/authGuard.jsx";
 import LoginPage from "./Pages/loginPage/LoginPage.jsx";
 import SignupPage from "./Pages/SignupPage/SignupPage.jsx";
 import AllCourses from "./Pages/Allcourses/AllCourses.jsx";
