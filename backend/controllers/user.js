@@ -104,6 +104,7 @@ const logout = async (req,res,next)=>{
             expires : 0,
             secure : true,
             httpOnly : true,
+            sameSite: "None",
         });
     
         res.status(200).json({
