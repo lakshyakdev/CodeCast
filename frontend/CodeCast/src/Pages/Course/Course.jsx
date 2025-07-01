@@ -8,6 +8,7 @@ import Drawer from "../../ComponentFolder/Drawer/Drawer";
 
 
 export default function Course(){
+    
     const dispatch =useDispatch();
     let course = useSelector((state)=>state.course.selectedCourse);
     const viewcourse = async (id)=>{
@@ -30,21 +31,36 @@ export default function Course(){
     if (!course) {
         return (
             <Drawer>
-            <p className="text-center">Loading course...</p>
+            <h1 className="text-center"><b>Loading content.....</b></h1>
+                <div className="flex w-52 flex-col gap-4">
+                    <div className="skeleton h-32 w-full"></div>
+                    <div className="skeleton h-4 w-28"></div>
+                    <div className="skeleton h-4 w-full"></div>
+                    <div className="skeleton h-4 w-full"></div>
+                </div>
             </Drawer>
         );
     }
     return(
         <>
-            <Drawer>
-                <img className="h-24 w-24" src={course.thumbnail.url} alt="thumbnail" />
+        <Drawer>
+        <div className="card bg-base-100 w-96 shadow-sm m-auto mt-20">
+            <figure className="px-10 pt-10">
+                <img
+                src={course.thumbnail.url}
+                alt="Course thumbnail"
+                className="rounded-xl" />
+            </figure>
+            <div className="card-body items-center text-center">
                 <h1 className="text-2xl">Title : {course.title}</h1>
                 <h2>Access level : {course.accessLevel}</h2>
                 <h2>Description :{course.description}</h2>
                 <h2>Total number of users enrolled: {course.enrolledUsers.length}</h2>
                 <h2>Total number of lessons: {course.lesson.length}</h2>
                 <p>Last edited : {course.updatedAt}</p>
-            </Drawer>
+            </div>
+        </div>
+        </Drawer>
         </>
     )
 }

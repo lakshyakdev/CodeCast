@@ -52,6 +52,15 @@ export default function Drawer({ children }) {
               <ul className="space-y-2">
                 <li>
                   <Link 
+                    to="/courses" 
+                    className="block p-3 rounded-lg hover:bg-base-300 transition-colors menu-btn"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    All Courses
+                  </Link>
+                </li>
+                <li>
+                  <Link 
                     to="/dashboard" 
                     className="block p-3 rounded-lg hover:bg-base-300 transition-colors menu-btn"
                     onClick={() => setIsOpen(false)}
@@ -81,7 +90,18 @@ export default function Drawer({ children }) {
                   </Link>
                 </li>)
                 }
-                {isloggedin && role === "ADMIN" &&
+                {isloggedin && (role === "ADMIN" || role ==="FACULTY") &&
+                (<li>
+                  <Link 
+                    to="/addCourse" 
+                    className="block p-3 rounded-lg hover:bg-base-300 transition-colors menu-btn"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Add Course
+                  </Link>
+                </li>)
+                }
+                {isloggedin &&
                 (<li>
                   <Link 
                     to="/courses" 

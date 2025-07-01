@@ -10,17 +10,20 @@ import Drawer from "../../ComponentFolder/Drawer/Drawer";
 
 export default function AllCourses(){
     const [courses , setcourses] = useState([]);
+    const [loading, setLoading] = useState(true);
+
     const dispatch = useDispatch();
     async function FetchAllCourses(){
         const response = await dispatch(getAllCourses());
         if (response.type === '/courses/fulfilled' && response.payload?.success) {
             setcourses(response.payload?.allCourses);
+            setLoading(false);
             console.log("Success");
         } 
         else if (response.type === '/courses/rejected') {
-            toast.error(response.payload || "Login failed");
+            toast.error(response.payload || "Course fetch failed");
         } else {
-            toast.error("Login failed - unexpected response");
+            toast.error("Course fetch failed");
         }
     }
 
@@ -30,7 +33,19 @@ export default function AllCourses(){
     })();
   }, []);
 
-
+    if (loading) {
+            return (
+                <Drawer>
+                <h1 className="text-center"><b>Loading content.....</b></h1>
+                <div className="flex w-52 flex-col gap-4">
+                    <div className="skeleton h-32 w-full"></div>
+                    <div className="skeleton h-4 w-28"></div>
+                    <div className="skeleton h-4 w-full"></div>
+                    <div className="skeleton h-4 w-full"></div>
+                </div>
+                </Drawer>
+            );
+    }
     return (
         <>
         <div className="min-h-screen bg-base-200 flex flex-col bg-gray-50">

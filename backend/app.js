@@ -5,14 +5,15 @@ import cookieParser from "cookie-parser";
 
 import cors from "cors";
 
+app.use(cors({
+  origin: [ "http://localhost:5173","https://codecast-l16n.onrender.com",],
+  credentials: true,
+}));
+
 app.use(express.json());
 app.use(cookieParser(process.env.Secret));
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors({
-  origin: "https://codecast-l16n.onrender.com",
-  credentials: true,
-}));
 
 app.get("/",(req,res)=>{
     res.send("Server is working fine");
