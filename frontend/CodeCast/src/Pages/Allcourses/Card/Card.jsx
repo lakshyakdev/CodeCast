@@ -8,7 +8,7 @@ return(
     <img
       src={thumbnail}
       alt="thumbnail"
-      className=" h-48 object-cover"
+      className=" h-48 object-cover pt-4 rounded-lg"
     />
   </figure>
   <div className="card-body">

@@ -27,6 +27,16 @@ export const viewCourse = createAsyncThunk("/courses/course", async ( id , {reje
     }
 })
 
+export const createCourse = createAsyncThunk("/course/create", async (data, { rejectWithValue }) => {
+    try {
+        const res = await axiosInstance.post("courses/", data);
+        return res.data;
+    } catch (e) {
+        const errorMessage = e?.response?.data?.message || "Course Add failed failed";
+        return rejectWithValue(errorMessage);
+    }
+});
+
 const courseSlice = createSlice({
     name: "course",
     initialState: initialState,
@@ -48,6 +58,12 @@ const courseSlice = createSlice({
                 state.selectedCourse = action.payload?.course;
             })
             .addCase(viewCourse.rejected, (state, action) => {
+                console.log(action.error.message);
+            })
+            .addCase(createCourse.fulfilled, (state, action) => {
+                state.courses.push(action.payload?.course);
+            })
+            .addCase(createCourse.rejected, (state, action) => {
                 console.log(action.error.message);
             })
     }

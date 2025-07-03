@@ -1,17 +1,18 @@
 import "./AddCourseForm.css"
 import { Link, useNavigate } from "react-router-dom"
-import {BsPersonCircle} from "react-icons/bs"
+import { BsFillFileImageFill } from "react-icons/bs";
 import { useState } from "react"
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { createAccount } from "../../redux/slices/authSlice";
+import { createCourse } from "../../redux/slices/courseSlice";
 export default function SignupPage(){
     let [inputImg, setinputImg] = useState("");
     let [inputData, setinputData] = useState({
-        avatar : "",
-        username : "",
-        email : "",
-        password : "",
+        thumbnail : "",
+        title : "",
+        description : "",
+        accessLevel : "FREE",
     })
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -26,7 +27,7 @@ export default function SignupPage(){
         if(uploadImage){
             setinputData({
                 ...inputData,
-                avatar : uploadImage,
+                thumbnail : uploadImage,
             })
             const fileReader = new FileReader();
             fileReader.readAsDataURL(uploadImage);
@@ -38,41 +39,36 @@ export default function SignupPage(){
 
     async function createAccountFn(e){
         e.preventDefault();
-        if(!inputData.email || !inputData.password || !inputData.username){
+        console.log(inputData.accessLevel);
+        if(!inputData.title || !inputData.description || !inputData.accessLevel){
             return toast.error("All fields are required");
         }
-        if(!inputData.email.match(/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/)){
-            return toast.error("please enter valid email");
-        }
-        if(!inputData.password.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,20}$/)){
-            return toast.error("Password must be 8 characters long must conatin \n password contains at least one lowercase letter\n password contains at least one uppercase letter. \n  password contains at least one special character\n password does not contain any whitespace characters");
-        }
-        if(inputData.username.length<5){
+        if(inputData.title.length<5){
             return toast.error("Username must be 5 characters long");
         }
         let fileData = new FormData();
-        fileData.append("username" , inputData.username);
-        fileData.append("email" , inputData.email);
-        fileData.append("password" , inputData.password);
-        if(inputData.avatar){
-            fileData.append("avatar" , inputData.avatar);
+        fileData.append("title" , inputData.title);
+        fileData.append("description" , inputData.description);
+        fileData.append("accessLevel" , inputData.accessLevel);
+        if(inputData.thumbnail){
+            fileData.append("thumbnail" , inputData.thumbnail);
         }
-        const loadingToast = toast.loading("Authenticating user, please wait...");
+        const loadingToast = toast.loading("Connecting with database... , Please wait");
         try{
-            const response = await dispatch(createAccount(fileData));
+            const response = await dispatch(createCourse(fileData));
             toast.dismiss(loadingToast);
-            if(response.type === '/auth/login/fulfilled' && response.payload.success){
+            if(response.type === '/course/create/fulfilled' && response.payload.success){
                 navigate("/");
                 toast.success("Successfully regsitered");
                 setinputData({
-                avatar : "",
-                username : "",
-                email : "",
-                password : "",
+                thumbnail : "",
+                title : "",
+                description : "",
+                accessLevel : "FREE",
                 })
                 setinputImg("");
             }
-            else if (response.type === '/auth/login/rejected') {
+            else if (response.type === '/course/create/rejected') {
                 toast.error(response.payload || "Registration failed");
             }
             else {
@@ -86,42 +82,43 @@ export default function SignupPage(){
     }  
 
     return(
+        <>
+            <h1 className="text-center bg-base-200 flex-col pt-10"><b className="btn h-20 border-violet-900 border-5 text-5xl bg-black text-white rounded-4xl p-4">Add Course</b></h1>
             <div className="hero bg-base-200 flex-grow">
                 <form onSubmit={(e)=>createAccountFn(e)}>
                 <div className="hero-content flex-col lg:flex-row-reverse">
-                    <div className="text-center text-color lg:text-left">
-                    <h1 className="text-5xl font-bold">Welcome to CodeCast!</h1>
-                    <p className="py-6">
-                    Join CodeCast today and unlock a world of coding knowledge! <br />
-                        Whether you're just starting out or looking to level up your skills, CodeCast offers a wide range of curated courses and lessons tailored for every learner. Sign up now to track your progress, access exclusive content, and become part of a growing community of passionate developers.
-                    </p>
-                    </div>
-                    <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+                    <div className="card bg-base-100 w-full max-w-sm shadow-2xl">
                     <div className="card-body text-color">
                         <fieldset className="fieldset">
+                        <label className="label text-xl font-bold">Course Thumbnail</label>
                         <div>
                             <label htmlFor="image_upload" className="cursor-pointer">
                                 {inputImg ? (
-                                    <img src={inputImg} alt="prevImg" className="h-24 w-24 rounded-full m-auto" />
+                                    <img src={inputImg} alt="prevImg" className="h-60 w-60 m-auto" />
                                 ):(
-                                <BsPersonCircle className="h-24 w-24 rounded-full m-auto" />
+                                <BsFillFileImageFill  className="h-60 w-80 m-auto" />
                                 )}
                         </label>
-                        <input type="file" name="avatar" id="image_upload" onChange={(e)=>imageUpload(e)} className="hidden"/>
+                        <input type="file" name="thumbnail" id="image_upload" onChange={(e)=>imageUpload(e)} class="file-input"/>
                         </div>
-                        <label className="label text-xl font-bold">Username</label>
-                        <input type="text" name="username" className="input" placeholder="Username" value={inputData.username} onChange={(e)=>onInput(e)}required />
-                        <label className="label text-xl font-bold">Email</label>
-                        <input type="email" name="email" className="input" placeholder="Email" value={inputData.email} onChange={(e)=>onInput(e)} required/>
-                        <label className="label text-xl font-bold">Password</label>
-                        <input type="password" name="password" className="input" placeholder="Password" value={inputData.password} onChange={(e)=>onInput(e)} required/>
-                        <div><span className="font-bold text-base">Already a user </span><Link to="/login" className="link link-hover text-base link-custom font-bold">Login</Link></div>
-                        <button type="submit" className="btn Loginbtn btn-neutral mt-4">SignUp</button>
+                        <label className="label text-xl font-bold">Course Title</label>
+                        <input type="text" name="title" className="input" placeholder="title" value={inputData.title} onChange={(e)=>onInput(e)}required />
+                        <label className="label text-xl font-bold">Course Description</label>
+                        <input type="text" name="description" className="input" placeholder="description" value={inputData.description} onChange={(e)=>onInput(e)} required/>
+                        <label className="label text-xl font-bold">Access Level</label>
+                        <select defaultValue="Select" className="select" name="accessLevel" value={inputData.accessLevel} onChange={(e)=>onInput(e)} required>
+                            <option disabled={true}>Select</option>
+                            <option>FREE</option>
+                            <option>BASIC</option>
+                            <option>PREMIUM</option>
+                        </select>
+                        <button type="submit" className="btn Loginbtn btn-neutral mt-4">Add Course</button>
                         </fieldset>
                         </div>
                     </div>
                 </div>
             </form>    
         </div>
+        </>
     )
 }
